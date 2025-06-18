@@ -1,0 +1,14 @@
+
+- name: "{{ beat_name }}: Configure beats ilm policies"
+  become: true
+  ansible.builtin.template:
+    src: ilm-policy.json.j2
+    dest: /etc/{{ beat_name }}/ilm-policy.json
+    mode: "0640"
+
+- name: "{{ beat_name }}: Write beat config"
+  become: true
+  ansible.builtin.template:
+    src: "{{ beat_name }}_config.yml.j2"
+    dest: /etc/{{ beat_name }}/{{ beat_name }}.yml
+    mode: "0644"

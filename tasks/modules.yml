@@ -1,0 +1,19 @@
+
+- name: "{{ beat_name }} | modules: Create module config"
+  become: true
+  ansible.builtin.template:
+    src: module.yml.j2
+    dest: /etc/{{ beat_name }}/modules.d/{{ item.module }}.yml{{ '.disabled' if not (item.enabled | default(True)) }}
+    mode: "0644"
+  when:
+    - item.config is defined
+  loop: "{{ beat_modules[beat_name] }}"
+
+- name: "{{ beat_name }} | modules: Ensure only one module config exists"
+  become: true
+  ansible.builtin.file:
+    path: /etc/{{ beat_name }}/modules.d/{{ item.module }}.yml{{ '.disabled' if (item.enabled | default(True)) }}
+    state: absent
+  when:
+    - item.config is defined
+  loop: "{{ beat_modules[beat_name] }}"

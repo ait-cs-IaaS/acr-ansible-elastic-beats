@@ -1,0 +1,6 @@
+---
+beat_name: filebeat
+beat_version: 9.0.2
+
+beat_modules: {}
+beat_output_conf: {}
